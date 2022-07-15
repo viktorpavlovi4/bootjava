@@ -11,9 +11,4 @@ public class RestaurantVotingApplication {
     public static void main(String[] args) {
         SpringApplication.run(RestaurantVotingApplication.class, args);
     }
-
-//    @Override
-//    public void run(ApplicationArguments args) throws Exception {
-//        System.out.println(userRepository.findByLastNameContainingIgnoreCase("last"));
-//    }
 }

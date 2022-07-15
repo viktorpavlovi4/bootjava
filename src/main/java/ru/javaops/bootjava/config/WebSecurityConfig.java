@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -24,11 +25,12 @@ import java.util.Optional;
 @AllArgsConstructor
 public class WebSecurityConfig {
 
+    public static final PasswordEncoder PASSWORD_ENCODER = PasswordEncoderFactories.createDelegatingPasswordEncoder();
     private final UserRepository userRepository;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        return PASSWORD_ENCODER;
     }
 
     @Bean
@@ -46,7 +48,9 @@ public class WebSecurityConfig {
         http.authorizeRequests()
                 .antMatchers("/api/account").hasRole(Role.USER.name())
                 .antMatchers(("/api/**")).hasRole(Role.ADMIN.name())
-                .and().formLogin();
+                .and().httpBasic()
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().csrf().disable();
         return http.build();
     }
 }
