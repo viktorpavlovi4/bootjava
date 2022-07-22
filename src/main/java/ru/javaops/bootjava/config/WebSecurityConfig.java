@@ -46,6 +46,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers("/api/acoount/register").anonymous()
                 .antMatchers("/api/account").hasRole(Role.USER.name())
                 .antMatchers(("/api/**")).hasRole(Role.ADMIN.name())
                 .and().httpBasic()
